@@ -29,10 +29,11 @@ namespace CBA.Web
         {
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.SignIn.RequireConfirmedEmail = true;
-            })
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+            //services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+           // {
+              //  options.SignIn.RequireConfirmedEmail = true;
+          //  })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             services.Configure<DataProtectionTokenProviderOptions>(options =>

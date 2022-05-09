@@ -92,10 +92,10 @@ namespace CBA.Web.Controllers
                     //var token = await userManager.CreateAsync(user, model.Password);
                     //var confirmedLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
                     //logger.Log(LogLevel.Warning, confirmedLink);
-                    if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                    {
-                        return RedirectToAction("ListUsers", "Administration");
-                    }
+                    //if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    //{
+                     //   return RedirectToAction("ListUsers", "Administration");
+                   // }
                     //ViewBag.ErrorTitle = "Registration successful";
                     //ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
                       //      "email, by clicking on the confirmation link we have emailed you";
@@ -106,7 +106,8 @@ namespace CBA.Web.Controllers
 
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error.Description);
+                   // ModelState.AddModelError("", error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
             return View(model);
@@ -201,7 +202,7 @@ namespace CBA.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(Login model)
+        public async Task<IActionResult> Login(Login model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -210,7 +211,15 @@ namespace CBA.Web.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("index", "home");
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("index", "home");
+
+                    }
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
@@ -218,7 +227,12 @@ namespace CBA.Web.Controllers
 
             return View(model);
         }
-    
+        
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPassword model)

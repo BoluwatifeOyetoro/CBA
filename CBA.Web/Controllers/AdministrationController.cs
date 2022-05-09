@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CBA.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -170,7 +170,7 @@ namespace CBA.Web.Controllers
         public IActionResult ListUsers()
         {
             var users = userManager.Users;
-            return View();
+            return View(users);
         }
 
         [HttpGet]

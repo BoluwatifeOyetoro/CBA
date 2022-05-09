@@ -4,31 +4,50 @@
     ViewBag.Title = "All Users";
 }
 
-<h1>All Users</h1>
-
-@if (Model.Any())
-{
-    <a asp-action="Register" asp-controller="Account"
-       class="btn btn-primary mb-3" style="width:auto">
-        Add new user
-    </a>
-
-    foreach (var user in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-header">
-                User Id : @user.Id
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">@user.UserName</h5>
-            </div>
-            <div class="card-footer">
-                <a asp-action="EditUser" asp-controller="Administration" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
-                <a href="#" class="btn btn-danger">Delete</a>
-            </div>
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">List of Roles</h2>
         </div>
-    }
-}
+        <div class="col-6 text-right">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary mb-3" style="width:auto">Add New User</a>
+        </div>
+    </div>
+    <br />
+</div>
+
+@if(Model.Count() > 0)
+{
+    <table  class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    SN
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Changes
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td width="10%">@user.Id</td>
+                    <td width="16%">@user.UserName</td>
+                    <td width="16%">
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-action="EditUser" asp-controller="Administration" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+    </table>
+   }
 else
 {
     <div class="card">

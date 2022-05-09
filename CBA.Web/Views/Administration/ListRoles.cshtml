@@ -4,29 +4,50 @@
     ViewBag.Title = "All Roles";
 }
 
-<h1>All Roles</h1>
-
-@if (Model.Any())
-{
-    <a class="btn btn-primary mb-3" style="width:auto" asp-action="CreateRole"
-       asp-controller="administration">Add new role</a>
-
-    foreach (var role in Model)
-    {
-        <div class="card mb-3">
-            <div class="card-header">
-                Role Id : @role.Id
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">@role.Name</h5>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
-                <a href="#" class="btn btn-danger">Delete</a>
-            </div>
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">List of Roles</h2>
         </div>
+        <div class="col-6 text-right">
+            <a asp-controller="administration" asp-action="CreateRole" class="btn btn-primary mb-3" style="width:auto">Add New Role</a>
+        </div>
+    </div>
+    <br />
+</div>
+
+    @if(Model.Count() > 0)
+    {
+        <table  class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        SN
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Changes
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                       <td width="10%">@role.Id</td>
+                       <td width="16%">@role.Name</td>
+                       <td width="16%">
+                           <div class="w-100 btn-group" role="group">
+                               <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
+                           </div>
+                       </td>
+                   </tr>
+                }
+             </tbody>
+        </table>
     }
-}
 else
 {
     <div class="card">
