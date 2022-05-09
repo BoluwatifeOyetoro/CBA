@@ -21,11 +21,48 @@ namespace CBA.Web.Controllers
             this.logger = logger;
         }
 
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePassword model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var result = await userManager.ChangePasswordAsync(user,
+                    model.CurrentPassword, model.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View();
+                }
+
+                await signInManager.RefreshSignInAsync(user);
+                return View("ChangePasswordConfirmation");
+            }
+
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index", "Home");
         }
         //Get 
         [HttpGet]
@@ -41,13 +78,30 @@ namespace CBA.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser 
+                {   UserName = model.Email, 
+                    Email = model.Email, 
+                    FirstName = model.FirstName, 
+                    LastName = model.LastName, 
+                    Gender = model.Gender
+                };
                 var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
+                    //var token = await userManager.CreateAsync(user, model.Password);
+                    //var confirmedLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
+                    //logger.Log(LogLevel.Warning, confirmedLink);
+                    if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+                    //ViewBag.ErrorTitle = "Registration successful";
+                    //ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
+                      //      "email, by clicking on the confirmation link we have emailed you";
+                    //return View("Error");
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "User");
+                    return RedirectToAction("index", "home");
                 }
 
                 foreach (var error in result.Errors)
@@ -57,6 +111,33 @@ namespace CBA.Web.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("index", "home");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"The User ID {userId} is invalid";
+                return View("NotFound");
+            }
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View();
+            }
+
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return View("Error");
+        }
+
 
         [AcceptVerbs("Get", "Post")]
         [AllowAnonymous]
@@ -82,30 +163,62 @@ namespace CBA.Web.Controllers
             return View();
         }
 
+//        [HttpPost]
+  //      [AllowAnonymous]
+    //    public async Task<IActionResult> Login(Login model, string returnUrl)
+      //  {
+        //    if (ModelState.IsValid)
+          //  {
+            //    var user = await userManager.FindByEmailAsync(model.Email);
+            //
+              //  if (user != null && !user.EmailConfirmed &&
+                //            (await userManager.CheckPasswordAsync(user, model.Password)))
+                //{
+                  //  ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    //return View(model);
+               // }
+
+                //var result = await signInManager.PasswordSignInAsync(model.Email,
+                                      //  model.Password, model.RememberMe, false);
+            //
+                //if (result.Succeeded)
+               // {
+                 //   if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                   // {
+                     //   return Redirect(returnUrl);
+                    //}
+                    //else
+                    //{
+                      //  return RedirectToAction("Index", "Home");
+
+                   // }
+                //}
+
+              //  ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+           // }
+          //  return View(model);
+      //  }
+
         [HttpPost]
-        public async Task<IActionResult> Login(Login model, string returnUrl)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(Login model)
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await signInManager.PasswordSignInAsync(
+                    model.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "User");
-
-                    }
+                    return RedirectToAction("index", "home");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
+
             return View(model);
         }
+    
 
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPassword model)
@@ -163,6 +276,13 @@ namespace CBA.Web.Controllers
                 return View("ResetPasswordConfirmation");
             }
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

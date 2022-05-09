@@ -8,26 +8,29 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Models
 {
-    public class Register
+    public class EditUser
     {
+        public EditUser()
+        {
+            Claims = new List<string>();
+            Roles = new List<string>();
+        }
+
+        public string Id { get; set; }
+
         [Required]
         [EmailAddress]
-        //[Remote(action: "IsEmailInUse", controller:"Account")]
         public string Email { get; set; }
         [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Display(Name = "Confirm Password")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
-        [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [Required]
+
         public Gender? Gender { get; set; }
+
+        public List<string> Claims { get; set; }
+
+        public IList<string> Roles { get; set; }
     }
 }
