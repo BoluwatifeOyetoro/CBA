@@ -13,11 +13,11 @@ namespace CBA.Web.Controllers
     //[Authorize]
     public class AdministrationController : Controller
     {
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<AdministrationController> logger;
 
-        public AdministrationController (RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ILogger<AdministrationController> logger)
+        public AdministrationController (RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ILogger<AdministrationController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
@@ -184,7 +184,7 @@ namespace CBA.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityRole identityRole = new IdentityRole
+                ApplicationRole identityRole = new ApplicationRole
                 {
                     Name = model.RoleName
                 };
@@ -232,6 +232,7 @@ namespace CBA.Web.Controllers
                 FirstName = user.UserName,
                 LastName = user.LastName,
                 Gender = user.Gender,
+                Status = user.Status,
                 Claims = userClaims.Select(c => c.Value).ToList(),
                 Roles = userRoles
             };
@@ -256,6 +257,7 @@ namespace CBA.Web.Controllers
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.Gender = model.Gender;
+                user.Status = model.Status;
 
                 var result = await userManager.UpdateAsync(user);
 
@@ -287,7 +289,8 @@ namespace CBA.Web.Controllers
             var model = new EditRoles
             {
                 Id = role.Id,
-                RoleName = role.Name
+                RoleName = role.Name,
+                Status = role.Status
             };
 
             foreach (var user in userManager.Users)

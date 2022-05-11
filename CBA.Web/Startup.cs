@@ -1,4 +1,5 @@
 using CBA.Core.Models;
+using CBA.DAL;
 using CBA.DAL.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,13 +32,14 @@ namespace CBA.Web
         {
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-            //services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-           // {
-              //  options.SignIn.RequireConfirmedEmail = true;
-          //  })
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                //services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                // {
+                //  options.SignIn.RequireConfirmedEmail = true;
+                //  })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
             services.Configure<DataProtectionTokenProviderOptions>(options =>
                 options.TokenLifespan = TimeSpan.FromHours(5));
             services.AddMvc();
@@ -45,7 +47,7 @@ namespace CBA.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -76,6 +78,8 @@ namespace CBA.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            AppUserSeedData.Initialize(context, userManager, roleManager).Wait();
         }
     }
 }

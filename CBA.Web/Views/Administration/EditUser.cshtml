@@ -41,6 +41,16 @@
         </div>
      </div>
     <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <div class="col-sm-10">
+        <select class="form-control" name="EditUser.Status" id="Status" asp-for="Status">
+            <option value="False">Disabled</option>
+            <option value="True">Enabled</option>
+        </select>
+        </div>
+     </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
 
     
 
