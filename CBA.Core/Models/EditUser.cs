@@ -26,7 +26,7 @@ namespace CBA.Core.Models
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-
+        
         public Gender? Gender { get; set; }
 
         public List<string> Claims { get; set; }

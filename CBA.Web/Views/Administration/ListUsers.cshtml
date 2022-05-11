@@ -7,7 +7,7 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">List of Roles</h2>
+            <h2 class="text-primary">List of Users</h2>
         </div>
         <div class="col-6 text-right">
             <a asp-controller="Account" asp-action="Register" class="btn btn-primary mb-3" style="width:auto">Add New User</a>
@@ -22,13 +22,16 @@
         <thead>
             <tr>
                 <th>
-                    SN
+                    Email
                 </th>
                 <th>
-                    Name
+                    First Name
                 </th>
                 <th>
-                    Changes
+                    LastName
+                </th>
+                <th>
+                    Gender
                 </th>
             </tr>
         </thead>
@@ -36,8 +39,10 @@
             @foreach (var user in Model)
             {
                 <tr>
-                    <td width="10%">@user.Id</td>
                     <td width="16%">@user.UserName</td>
+                    <td width="16%">@user.FirstName</td>
+                    <td width="16%">@user.LastName</td>
+                    <td width="16%">@user.Gender</td>
                     <td width="16%">
                         <div class="w-100 btn-group" role="group">
                             <a asp-action="EditUser" asp-controller="Administration" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>

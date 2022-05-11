@@ -17,6 +17,7 @@ namespace CBA.Core.Models
         [Required(ErrorMessage ="Role Name is required")]
         [Display(Name ="Role Name")]
         public string RoleName { get; set; }
+        public bool Status { get; set; }
         public List<string> Users { get; set; }
 
     }
