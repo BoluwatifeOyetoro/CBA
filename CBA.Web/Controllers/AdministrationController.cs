@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CBA.Web.Controllers
 {
-    //[Authorize]
+    [Authorize (Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<ApplicationRole> roleManager;
@@ -316,6 +316,7 @@ namespace CBA.Web.Controllers
             else
             {
                 role.Name = model.RoleName;
+                role.Status = model.Status;
 
                 var result = await roleManager.UpdateAsync(role);
 
@@ -323,6 +324,7 @@ namespace CBA.Web.Controllers
                 {
                     return RedirectToAction("ListRoles");
                 }
+
 
                 foreach (var error in result.Errors)
                 {

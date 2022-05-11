@@ -1,6 +1,7 @@
 using CBA.Core.Models;
 using CBA.DAL;
 using CBA.DAL.Context;
+using CBA.Services.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,6 +45,8 @@ namespace CBA.Web
                 options.TokenLifespan = TimeSpan.FromHours(5));
             services.AddMvc();
             services.AddControllersWithViews();
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

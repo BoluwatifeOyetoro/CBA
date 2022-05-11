@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CBA.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace CBA.Core.Models
     {
         [Required]
         public string RoleName { get; set; }
+        public Status? Status { get; set; }
     }
 }

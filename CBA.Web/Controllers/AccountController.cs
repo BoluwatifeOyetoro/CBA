@@ -65,6 +65,7 @@ namespace CBA.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
         //Get 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
@@ -72,8 +73,8 @@ namespace CBA.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Register(Register model)
         {
             if (ModelState.IsValid)

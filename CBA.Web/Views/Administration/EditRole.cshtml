@@ -16,19 +16,17 @@
     <div class="form-group row">
         <label asp-for="RoleName" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="RoleName" class="form-control">
+            <input type="text" asp-for="RoleName" class="form-control">
             <span asp-validation-for="RoleName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="Status"></label>
         <div class="col-sm-10">
-        <select class="form-control" name="EditRoles.Status" id="Status" asp-for="Status">
-            <option value="False">Disabled</option>
-            <option value="True">Enabled</option>
-        </select>
+            <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()"></select>
+            <span asp-validation-for="Status" class="text-danger"></span>
         </div>
-     </div>
+    </div>
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div asp-validation-summary="All" class="text-danger"></div>

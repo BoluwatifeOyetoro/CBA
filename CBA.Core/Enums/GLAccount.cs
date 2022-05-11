@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Enums
 {
-    public enum Gender
+    public enum GLAccount
     {
-        Any = 0,
-        Male = 1,
-        Female = 2
+        Savings = 1,
+        Current = 2,
+        Loan = 3
     }
 }

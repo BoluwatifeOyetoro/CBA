@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Enums
 {
-    public enum Gender
+    public enum Status
     {
-        Any = 0,
-        Male = 1,
-        Female = 2
+        Enabled = 0,
+        Disabled = 1,
     }
 }

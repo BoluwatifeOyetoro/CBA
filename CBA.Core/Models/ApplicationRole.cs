@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CBA.Core.Enums;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,11 @@ namespace CBA.Core.Models
         public ApplicationRole() : base() { }
         public ApplicationRole(string roleName) : base(roleName) { }
 
-        public ApplicationRole(string roleName, bool status) : base(roleName)
+        public ApplicationRole(string roleName, Status? status) : base(roleName)
         {
             this.Status = status;
         }
 
-        public bool Status { get; set; }
+        public Status? Status { get; set; }
     }
 }

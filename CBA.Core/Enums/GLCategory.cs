@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Enums
 {
-    public enum Gender
+    public enum GLCategory
     {
-        Any = 0,
-        Male = 1,
-        Female = 2
+        Asset = 1, 
+        Liability = 2,
+        Capital = 3,
+        Income = 4,
+        Expense = 5
     }
 }

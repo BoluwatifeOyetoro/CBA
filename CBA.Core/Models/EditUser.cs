@@ -28,7 +28,7 @@ namespace CBA.Core.Models
         public string LastName { get; set; }
         
         public Gender? Gender { get; set; }
-        public bool Status { get; set; }
+        public Status? Status { get; set; }
 
         public List<string> Claims { get; set; }
 
