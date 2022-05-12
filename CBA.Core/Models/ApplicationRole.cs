@@ -13,11 +13,11 @@ namespace CBA.Core.Models
         public ApplicationRole() : base() { }
         public ApplicationRole(string roleName) : base(roleName) { }
 
-        public ApplicationRole(string roleName, Status? status) : base(roleName)
+        public ApplicationRole(string roleName, bool status) : base(roleName)
         {
             this.Status = status;
         }
 
-        public Status? Status { get; set; }
+        public bool Status { get; set; }
     }
 }

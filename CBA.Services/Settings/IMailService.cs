@@ -11,5 +11,7 @@ namespace CBA.Services.Settings
     {
         Task SendEmailAsync(MailRequest mailRequest);
         Task SendWelcomeEmailAsync(WelcomeRequest request);
+        Task SendWelcomeEmailAsync(ResetPassword request);
+        Task ResetPassword(ResetPassword request);
     }
 }

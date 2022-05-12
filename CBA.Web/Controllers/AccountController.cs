@@ -85,7 +85,7 @@ namespace CBA.Web.Controllers
                     FirstName = model.FirstName, 
                     LastName = model.LastName, 
                     Gender = model.Gender,
-                    Status = model.Status
+                    //Status = model.Status
                 };
                 var result = await userManager.CreateAsync(user, model.Password);
 

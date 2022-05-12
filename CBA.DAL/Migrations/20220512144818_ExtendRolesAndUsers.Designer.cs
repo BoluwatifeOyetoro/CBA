@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBA.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220511102649_Extend-IdentityRoleAndUser")]
-    partial class ExtendIdentityRoleAndUser
+    [Migration("20220512144818_ExtendRolesAndUsers")]
+    partial class ExtendRolesAndUsers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,8 +41,8 @@ namespace CBA.DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -109,8 +109,8 @@ namespace CBA.DAL.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");

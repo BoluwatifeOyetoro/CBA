@@ -4,21 +4,23 @@
 
 namespace CBA.DAL.Migrations
 {
-    public partial class ExtendIdentityRoleAndUser : Migration
+    public partial class ExtendRolesAndUsers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<bool>(
                 name: "Status",
                 table: "AspNetUsers",
-                type: "int",
-                nullable: true);
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<bool>(
                 name: "Status",
                 table: "AspNetRoles",
-                type: "int",
-                nullable: true);
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

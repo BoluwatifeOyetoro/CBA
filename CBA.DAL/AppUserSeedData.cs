@@ -22,7 +22,7 @@ namespace CBA.DAL
             String adminId = "";
 
             string role = "Admin";
-            Status? status = Status.Enabled;
+            bool status = true;
 
 
             string password = "P@$$w0rd";
@@ -41,7 +41,7 @@ namespace CBA.DAL
                     FirstName = "Boluwatife",
                     LastName = "Oyetoro",
                     Gender = Core.Enums.Gender.Male,
-                    Status = Core.Enums.Status.Enabled
+                    Status = true
                 };
 
                 var result = await userManager.CreateAsync(user);

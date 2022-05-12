@@ -12,6 +12,6 @@ namespace CBA.Core.Models
     {
         [Required]
         public string RoleName { get; set; }
-        public Status? Status { get; set; }
+        public bool Status { get; set; }
     }
 }

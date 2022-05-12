@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -207,7 +208,7 @@ namespace CBA.Web.Controllers
         [HttpGet]
         public IActionResult ListRoles()
         {
-            var roles = roleManager.Roles;
+           var roles = roleManager.Roles;
             return View(roles);
         }
 
