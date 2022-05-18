@@ -1,6 +1,8 @@
 using CBA.Core.Models;
 using CBA.DAL;
 using CBA.DAL.Context;
+using CBA.DAL.Implementations;
+using CBA.DAL.Interfaces;
 using CBA.Services.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,15 +48,18 @@ namespace CBA.Web
             services.AddMvc();
             services.AddControllersWithViews();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddScoped<IGLCategoryDAO, SQLCategoryDAO>();
             services.AddTransient<IMailService, MailService>();
+            services.AddTransient<AppUserSeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, AppUserSeedData seeder)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //seeder.SeedAdminUserAndRoles();
             }
             else
             {
@@ -82,7 +87,7 @@ namespace CBA.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            AppUserSeedData.Initialize(context, userManager, roleManager).Wait();
+            //AppUserSeedData.Initialize(context, userManager, roleManager).Wait();
         }
     }
 }

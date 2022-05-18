@@ -1,8 +1,11 @@
 ﻿using CBA.Core.Models;
+using CBA.DAL.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CBA.Web.Controllers
@@ -13,12 +16,145 @@ namespace CBA.Web.Controllers
 
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<AccountController> logger;
+        private readonly AppDbContext context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger)
+        public AccountController(AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
+            this.context = context;
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Register(Register model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Gender = model.Gender,
+                    Status = model.Status
+                };
+                var result = await userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    //var token = await userManager.CreateAsync(user, model.Password);
+                    //var confirmedLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
+                    //logger.Log(LogLevel.Warning, confirmedLink);
+                    //if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    //{
+                    //   return RedirectToAction("ListUsers", "Administration");
+                    // }
+                    //ViewBag.ErrorTitle = "Registration successful";
+                    //ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
+                    //      "email, by clicking on the confirmation link we have emailed you";
+                    //return View("Error");
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("index", "home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    // ModelState.AddModelError("", error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        //        [HttpPost]
+        //      [AllowAnonymous]
+        //    public async Task<IActionResult> Login(Login model, string returnUrl)
+        //  {
+        //    if (ModelState.IsValid)
+        //  {
+        //    var user = await userManager.FindByEmailAsync(model.Email);
+        //
+        //  if (user != null && !user.EmailConfirmed &&
+        //            (await userManager.CheckPasswordAsync(user, model.Password)))
+        //{
+        //  ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+        //return View(model);
+        // }
+
+        //var result = await signInManager.PasswordSignInAsync(model.Email,
+        //  model.Password, model.RememberMe, false);
+        //
+        //if (result.Succeeded)
+        // {
+        //   if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        // {
+        //   return Redirect(returnUrl);
+        //}
+        //else
+        //{
+        //  return RedirectToAction("Index", "Home");
+
+        // }
+        //}
+
+        //  ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+        // }
+        //  return View(model);
+        //  }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(Login model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user != null && user.Status != true)
+                {
+                    ModelState.AddModelError(string.Empty, "User is inactive");
+                    return View(model);
+                }
+                var result = await signInManager.PasswordSignInAsync(
+                    model.Email, model.Password, model.RememberMe, false );
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    
+                    else
+                    {
+                        return RedirectToAction("index", "home");
+                    }
+                }
+                
+                ModelState.AddModelError(string.Empty, "Invalid Login Attempt, check details");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -58,63 +194,8 @@ namespace CBA.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-        //Get 
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register()
-        {
-            return View();
-        }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Register(Register model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser 
-                {   UserName = model.Email, 
-                    Email = model.Email, 
-                    FirstName = model.FirstName, 
-                    LastName = model.LastName, 
-                    Gender = model.Gender,
-                    //Status = model.Status
-                };
-                var result = await userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    //var token = await userManager.CreateAsync(user, model.Password);
-                    //var confirmedLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
-                    //logger.Log(LogLevel.Warning, confirmedLink);
-                    //if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                    //{
-                     //   return RedirectToAction("ListUsers", "Administration");
-                   // }
-                    //ViewBag.ErrorTitle = "Registration successful";
-                    //ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
-                      //      "email, by clicking on the confirmation link we have emailed you";
-                    //return View("Error");
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                   // ModelState.AddModelError("", error.Description);
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
-            return View(model);
-        }
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -157,79 +238,7 @@ namespace CBA.Web.Controllers
             }
         }
 
-        
 
-        //Get 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-//        [HttpPost]
-  //      [AllowAnonymous]
-    //    public async Task<IActionResult> Login(Login model, string returnUrl)
-      //  {
-        //    if (ModelState.IsValid)
-          //  {
-            //    var user = await userManager.FindByEmailAsync(model.Email);
-            //
-              //  if (user != null && !user.EmailConfirmed &&
-                //            (await userManager.CheckPasswordAsync(user, model.Password)))
-                //{
-                  //  ModelState.AddModelError(string.Empty, "Email not confirmed yet");
-                    //return View(model);
-               // }
-
-                //var result = await signInManager.PasswordSignInAsync(model.Email,
-                                      //  model.Password, model.RememberMe, false);
-            //
-                //if (result.Succeeded)
-               // {
-                 //   if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                   // {
-                     //   return Redirect(returnUrl);
-                    //}
-                    //else
-                    //{
-                      //  return RedirectToAction("Index", "Home");
-
-                   // }
-                //}
-
-              //  ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-           // }
-          //  return View(model);
-      //  }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(Login model, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await signInManager.PasswordSignInAsync(
-                    model.Email, model.Password, model.RememberMe, false);
-
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("index", "home");
-
-                    }
-                }
-
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-            }
-
-            return View(model);
-        }
-        
         [HttpGet]
         public IActionResult ForgotPassword()
         {
@@ -293,6 +302,8 @@ namespace CBA.Web.Controllers
             }
             return View(model);
         }
+
+        
 
         [HttpGet]
         [AllowAnonymous]

@@ -17,10 +17,15 @@ namespace CBA.DAL.Context
         }
 
         public DbSet<Login> Login { get; set; }
+        public DbSet<GLCategory> GLCategories { get; set; }
+
+        public DbSet<GLAccount> GLAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
         }
+
+
     }
 }

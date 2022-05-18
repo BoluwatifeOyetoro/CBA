@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CBA.Core.Enums
+namespace CBA.Core.View_Models
 {
-    public enum Status
+    public class GLCategoryEditViewModel : GLCategoryCreateViewModel
     {
-        Any,
-        Enabled,
-        Disabled 
+
     }
 }

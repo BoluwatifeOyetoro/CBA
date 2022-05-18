@@ -4,6 +4,7 @@ using CBA.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBA.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220516182715_GLCategory")]
+    partial class GLCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,27 +130,6 @@ namespace CBA.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
-                {
-                    b.Property<int>("GLAccountID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GLAccountID"), 1L, 1);
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GLCategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GLAccountID");
-
-                    b.HasIndex("GLCategoryId");
-
-                    b.ToTable("GLAccounts");
                 });
 
             modelBuilder.Entity("CBA.Core.Models.GLCategory", b =>
@@ -301,15 +282,6 @@ namespace CBA.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
-                {
-                    b.HasOne("CBA.Core.Models.GLCategory", "GLCategory")
-                        .WithMany()
-                        .HasForeignKey("GLCategoryId");
-
-                    b.Navigation("GLCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

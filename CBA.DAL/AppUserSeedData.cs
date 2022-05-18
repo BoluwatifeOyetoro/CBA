@@ -7,51 +7,71 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CBA.DAL
 {
     public class AppUserSeedData
     {
 
-        public static async Task Initialize(AppDbContext context,
-                              UserManager<ApplicationUser> userManager,
-                              RoleManager<ApplicationRole> roleManager)
+        private readonly AppDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
+
+        public AppUserSeedData(AppDbContext _context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
-            context.Database.EnsureCreated();
+            context = _context;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+        }
 
-            String adminId = "";
-
-            string role = "Admin";
-            bool status = true;
-
-
-            string password = "P@$$w0rd";
-
-            if (await roleManager.FindByNameAsync(role) == null)
+        public async Task SeedAdminUserAndRoles()
+        {
+            string[] roles = new string[]
             {
-                await roleManager.CreateAsync(new ApplicationRole(role, status));
-            }
+                "Super Admin",
+                 "Admin",
+                 "Tester",
+                 "Manager",
+                 "Auditor",
+                 "Developer",
+            };
 
-            if (await userManager.FindByNameAsync("aa@aa.aa") == null)
+            foreach (string role in roles)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = "boluwatifeoyetoro@gmail.com",
-                    Email = "boluwatifeoyetoro@gmail.com",
-                    FirstName = "Boluwatife",
-                    LastName = "Oyetoro",
-                    Gender = Core.Enums.Gender.Male,
-                    Status = true
-                };
+                var roleStore = new RoleStore<ApplicationRole>(context);
 
-                var result = await userManager.CreateAsync(user);
-                if (result.Succeeded)
+                if (context.Roles.Any(r => r.Name == role))
                 {
-                    await userManager.AddPasswordAsync(user, password);
-                    await userManager.AddToRoleAsync(user, role);
+                    await roleManager.CreateAsync(new ApplicationRole { Name = role, Status = true, NormalizedName = role.ToUpper() });
                 }
-                adminId = user.Id;
             }
+            var user = new ApplicationUser
+            {
+                UserName = "bolexcoded43@gmail.com",
+                FirstName = "Boluwatife",
+                LastName = "Oyetoro",
+                Email = "bolexcoded43@gmail.com",
+                Gender = Core.Enums.Gender.Any,
+                NormalizedEmail = "DREECAST07@GMAIL.COM",
+                NormalizedUserName = "SUPERADMIN",
+                Status = true,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+
+            if (!context.Users.Any(u => u.UserName == user.UserName))
+            {
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(user, "password");
+                user.PasswordHash = hashed;
+                var userStore = new UserStore<ApplicationUser>(context);
+                await userStore.CreateAsync(user);
+                await userManager.AddToRoleAsync(user, "SUPER ADMIN");
+            }
+
+            await context.SaveChangesAsync();
 
         }
     }
