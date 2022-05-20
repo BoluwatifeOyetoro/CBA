@@ -9,9 +9,8 @@ namespace CBA.Services.Settings
 {
     public interface IMailService
     {
+        string GeneratePassword();
+        string GenerateEmail();
         Task SendEmailAsync(MailRequest mailRequest);
-        Task SendWelcomeEmailAsync(WelcomeRequest request);
-        Task SendWelcomeEmailAsync(ResetPassword request);
-        Task ResetPassword(ResetPassword request);
     }
 }

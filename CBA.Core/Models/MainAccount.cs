@@ -1,4 +1,5 @@
 ﻿using CBA.Core.Enums;
+using CBA.Core.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Models
 {
-    public class CreateRole
+    public class MainAccount : BaseEntity
     {
-        [Required]
-        public string RoleName { get; set; }
-        public Status? Status { get; set; }
+        [Display(Name = "Branch Name")]
+        [Required(ErrorMessage = "{0} is required")]
+        public virtual AccountCategory Name { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CBA.Core.Models;
 using CBA.DAL.Context;
+using CBA.Services.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace CBA.Web.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<AccountController> logger;
         private readonly AppDbContext context;
+        private readonly IMailService mailService;
 
-        public AccountController(AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger)
+        public AccountController(AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<AccountController> logger, IMailService mailService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.context = context;
+            this.mailService = mailService;
         }
 
         [HttpGet]
@@ -48,6 +51,13 @@ namespace CBA.Web.Controllers
                 };
                 var result = await userManager.CreateAsync(user, model.Password);
 
+                var mail = new MailRequest
+                {
+                    ToEmail = model.Email,
+                    Subject = model.FirstName,
+                    Body = model.Password,
+                };
+
                 if (result.Succeeded)
                 {
                     //var token = await userManager.CreateAsync(user, model.Password);
@@ -62,7 +72,8 @@ namespace CBA.Web.Controllers
                     //      "email, by clicking on the confirmation link we have emailed you";
                     //return View("Error");
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    await mailService.SendEmailAsync(mail);
+                    return RedirectToAction("listusers", "administration");
                 }
 
                 foreach (var error in result.Errors)
@@ -73,6 +84,33 @@ namespace CBA.Web.Controllers
             }
             return View(model);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> EditUserPassword(EditUser model)
+        //{
+        //    var user = await userManager.FindByIdAsync(model.Id);
+
+        //   // var password = IMailService.GeneratePassword();
+        //    var passHasher = new PasswordHasher<ApplicationUser>();
+        //    var hashed = passHasher.HashPassword(user, password);
+
+        //    await userManager.RemovePasswordAsync(user);
+        //    var result = await userManager.AddPasswordAsync(user, password);
+
+        //    var mail = new MailRequest
+        //    {
+        //        ToEmail = model.Email,
+        //        Subject = model.LastName,
+        //        Body = password,
+        //    };
+
+        //    if (result.Succeeded)
+        //    {
+        //        //await IMailService.SendEmailAsync(mail);
+        //        return RedirectToAction("listusers", "administration");
+        //    }
+        //    return View();
+        //}
 
         [HttpGet]
         public IActionResult Login()
@@ -123,7 +161,7 @@ namespace CBA.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByEmailAsync(model.Email);
-                if (user != null && user.Status != true)
+                if (user != null && user.Status != Core.Enums.Status.Enabled)
                 {
                     ModelState.AddModelError(string.Empty, "User is inactive");
                     return View(model);
@@ -195,7 +233,7 @@ namespace CBA.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)

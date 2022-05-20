@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Enums
 {
-    public enum GLAccount
+    public enum AccountCategory
     {
         Savings = 1,
         Current = 2,

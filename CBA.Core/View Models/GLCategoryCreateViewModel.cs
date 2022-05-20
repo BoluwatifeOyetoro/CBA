@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CBA.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace CBA.Core.View_Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool State { get; set; }
+        public Status? Status { get; set; }
         public string Description { get; set; }
     }
 }

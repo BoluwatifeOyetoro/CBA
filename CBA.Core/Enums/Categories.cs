@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace CBA.Core.Enums
 {
-    public enum Status
+    public enum Categories
     {
-        Enabled,
-        Disabled 
+        Asset = 1,
+        Liability = 2,
+        Capital = 3,
+        Income = 4,
+        Expense = 5
     }
 }

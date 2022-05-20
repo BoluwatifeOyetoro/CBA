@@ -39,8 +39,8 @@ namespace CBA.DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -107,8 +107,8 @@ namespace CBA.DAL.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -130,23 +130,167 @@ namespace CBA.DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
+            modelBuilder.Entity("CBA.Core.Models.Branch", b =>
                 {
-                    b.Property<int>("GLAccountID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GLAccountID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("Code")
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("SortCode")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Branch");
+                });
+
+            modelBuilder.Entity("CBA.Core.Models.Customer", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("GLCategoryId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.HasKey("GLAccountID");
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("GLCategoryId");
+                    b.Property<int>("NewCustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("CBA.Core.Models.CustomerAccount", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<decimal>("AccountBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AccountStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("CurrentLien")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DaysCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LinkedAccountID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("LoanAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("LoanInterestRatePerMonth")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LoanMonthlyInterestRepay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LoanMonthlyPrincipalRepay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LoanMonthlyRepay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LoanPrincipalRemaining")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("SavingsWithdrawalCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TermsOfLoan")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("dailyInterestAccrued")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BranchID");
+
+                    b.HasIndex("CustomerID");
+
+                    b.HasIndex("LinkedAccountID");
+
+                    b.ToTable("CustomerAccounts");
+                });
+
+            modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
+                {
+                    b.Property<int>("GLAccountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GLAccountId"), 1L, 1);
+
+                    b.Property<double>("AccountBalance")
+                        .HasColumnType("float");
+
+                    b.Property<long>("AccountCode")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("AccountName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Categories")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GlCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("GLAccountId");
+
+                    b.HasIndex("GlCategoryId");
 
                     b.ToTable("GLAccounts");
                 });
@@ -159,14 +303,20 @@ namespace CBA.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Description")
+                    b.Property<int>("Categories")
+                        .HasColumnType("int");
+
+                    b.Property<long>("CategoryCode")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CategoryDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -303,13 +453,38 @@ namespace CBA.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CBA.Core.Models.CustomerAccount", b =>
+                {
+                    b.HasOne("CBA.Core.Models.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CBA.Core.Models.Customer", "Customer")
+                        .WithMany("CustomerAccount")
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CBA.Core.Models.CustomerAccount", "LinkedAccount")
+                        .WithMany()
+                        .HasForeignKey("LinkedAccountID");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("LinkedAccount");
+                });
+
             modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
                 {
-                    b.HasOne("CBA.Core.Models.GLCategory", "GLCategory")
+                    b.HasOne("CBA.Core.Models.GLCategory", "GlCategory")
                         .WithMany()
-                        .HasForeignKey("GLCategoryId");
+                        .HasForeignKey("GlCategoryId");
 
-                    b.Navigation("GLCategory");
+                    b.Navigation("GlCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,6 +536,11 @@ namespace CBA.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CBA.Core.Models.Customer", b =>
+                {
+                    b.Navigation("CustomerAccount");
                 });
 #pragma warning restore 612, 618
         }

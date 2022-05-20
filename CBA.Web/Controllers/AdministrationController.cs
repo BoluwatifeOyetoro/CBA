@@ -137,11 +137,11 @@ namespace CBA.Web.Controllers
         [HttpGet]
         public IActionResult ListRoles()
         {
-           var roles = roleManager.Roles.ToList();
-            return View(roles);
+            var roles = roleManager.Roles.ToList();
+           return View(roles);
         }
 
-
+       
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
@@ -247,6 +247,13 @@ namespace CBA.Web.Controllers
                 return View("NotFound");
             }
 
+            //var userrole = await roleManager.GetRoleIdAsync(roleId);
+            if (role != null && role.Status != Core.Enums.Status.Enabled)
+            {
+                ModelState.AddModelError(string.Empty, "Role is disabled");
+                return View("ListRoles");
+            }
+
             for (int i = 0; i < model.Count; i++)
             {
                 var user = await userManager.FindByIdAsync(model[i].UserId);
@@ -327,6 +334,12 @@ namespace CBA.Web.Controllers
                 return View("NotFound");
             }
 
+            if (user != null && user.Status != Core.Enums.Status.Enabled)
+            {
+                ModelState.AddModelError(string.Empty, "User is Inactive");
+                return View("EditUser");
+            }
+
             var claims = await userManager.GetClaimsAsync(user);
             var result = await userManager.RemoveClaimsAsync(user, claims);
 
@@ -397,6 +410,12 @@ namespace CBA.Web.Controllers
             {
                 ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
                 return View("NotFound");
+            }
+
+            if (user != null && user.Status != Core.Enums.Status.Enabled)
+            {
+                ModelState.AddModelError(string.Empty, "User is Inactive");
+                return View("EditUser");
             }
 
             var roles = await userManager.GetRolesAsync(user);

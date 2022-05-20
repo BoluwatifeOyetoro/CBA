@@ -10,11 +10,14 @@ namespace CBA.Core.Models
 {
     public class Customer
     {
-        [Display(Name = "Customer ID")]
+        [Key]
         public int CustomerId { get; set; }
-        [Display(Name = "Customer Name")]
-        public string CustomerName { get; set; }
-        public string Address { get; set; }
+        public int NewCustomerId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public Gender Gender { get; set; }
+        public string Email { get; set; }
+        public Status Status { get; set; }
+        public ICollection<CustomerAccount> CustomerAccount { get; set; }
     }
 }

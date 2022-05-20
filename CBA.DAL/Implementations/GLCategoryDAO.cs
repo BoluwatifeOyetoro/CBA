@@ -1,51 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CBA.DAL.Interfaces;
-using System.Text;
-using System.Threading.Tasks;
-using CBA.Core.Models;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using CBA.DAL.Interfaces;
+//using System.Text;
+//using System.Threading.Tasks;
+//using CBA.Core.Models;
+//using CBA.Core.Enums;
+//using CBA.DAL.Context;
 
-namespace CBA.DAL.Implementations
-{
-    public class GLCategoryDAO : IGLCategoryDAO
-    {
-        private List<GLCategory> _glCategoryList;
-        public GLCategoryDAO()
-        {
-            _glCategoryList = new List<GLCategory>()
-            {
-                new GLCategory() { Id = 1, Name = "Revenue", State = true, Description = "Income"}
-            };
-        }
-        public GLCategory Add(GLCategory category)
-        {
-            category.Id = _glCategoryList.Max(e => e.Id) + 1;
-            _glCategoryList.Add(category);
-            return category;
-        }
+//namespace CBA.DAL.Implementations
+//{
+//    public class GLCategoryDAO : IGLCategoryDAO
+//    {
+//        private readonly AppDbContext context;
+//        private readonly GLCategory glCategory;
+//        private readonly GLCategory glCategoryChanges;
 
-        public IEnumerable<GLCategory> GetAllGLCategories()
-        {
-            return _glCategoryList;
-        }
+//        public GLCategoryDAO(GLCategory glCategory, AppDbContext context, GLCategory glCategoryChanges)
+//        {
+//            this.context = context;
+//            this.glCategory = glCategory;
+//            this.glCategoryChanges = glCategoryChanges;
+//        }
 
-        public GLCategory GetGLCategory(int Id)
-        {
-            return _glCategoryList.FirstOrDefault(x => x.Id == Id);
-        }
+//        public GLCategory Delete(long id)
+//        {
+//            GLCategory gLCategory = context.GLCategories.Find(id);
+//            if (gLCategory != null)
+//            {
+//                context.GLCategories.Remove(gLCategory);
+//                context.SaveChanges();
+//            }
+//            return gLCategory;
+//        }
 
-        public GLCategory Update(GLCategory categoryChanges)
-        {
-            GLCategory category = _glCategoryList.FirstOrDefault(e => e.Id == categoryChanges.Id);
-            if (category == null)
-            {
-                category.Id = categoryChanges.Id;
-                category.Name = categoryChanges.Name;
-                category.State = categoryChanges.State;
-                category.Description = categoryChanges.Description;
-            }
-            return category;
-        }
-    }
-}
+//        public IEnumerable<GLCategory> GetAllGLCategories()
+//        {
+//            var gLCategories = context.GLCategories.ToList();
+//            return gLCategories;
+//        }
+
+//        public GLCategory GetRoles(GLCategory user)
+//        {
+//            throw new NotImplementedException();
+//        }
+
+//        public GLCategory RetrieveById(int id)
+//        {
+//            GLCategory gLCategory = context.GLCategories.Find(id);
+//            return gLCategory;
+//        }
+
+//        public GLCategory Save(GLCategory item)
+//        {
+//            context.GLCategories.Add(glCategory);
+//            context.SaveChanges();
+//            return glCategory;
+//        }
+
+//        public GLCategory UpdateGLCategory(GLCategory userChanges)
+//        {
+//            var gLCategory = context.GLCategories.Attach(glCategoryChanges);
+//            gLCategory.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+//            context.SaveChanges();
+//            return glCategoryChanges;
+//        }
+//    }
+//}

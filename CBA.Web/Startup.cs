@@ -48,7 +48,10 @@ namespace CBA.Web
             services.AddMvc();
             services.AddControllersWithViews();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddScoped<IGLCategoryDAO, SQLCategoryDAO>();
+           // services.AddTransient<IGLAccountDAO, GLAccountDAO>();
+           // services.AddTransient<IGLCategoryDAO, GLCategoryDAO>();
+            services.AddTransient<ICustomerAccountDAO, CustomerAccountDAO>();
+            services.AddTransient<ICustomerDAO, CustomerDAO>();
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<AppUserSeedData>();
         }
