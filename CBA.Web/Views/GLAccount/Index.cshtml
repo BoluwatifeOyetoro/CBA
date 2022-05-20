@@ -1,17 +1,17 @@
 ﻿@using CBA.Core.Models
-@model IEnumerable<GLCategory>
+@model IEnumerable<GLAccount>
 
 @{
-    ViewData["Title"] = "GLCategories";
+    ViewData["Title"] = "GLAccounts";
 }
 
 
 <div class="text-center">
-    <h1 class="display-4">List of GLCategories</h1>
+    <h1 class="display-4">List of GLAccounts</h1>
 </div>
 <div class="text-right">
     
-     <a asp-area="" asp-controller="GLCategory" asp-action="Create" class="btn btn-primary">Add new GLCategory</a>
+     <a asp-area="" asp-controller="GLAccount" asp-action="Create" class="btn btn-primary">Add new GLAccount</a>
 </div>
 <br />
 
@@ -23,9 +23,10 @@
 <thead class="thead-light">
     <tr>
         <th>S/n</th>
-        <th>Category Name</th>
+        <th>GL Account Name</th>
+		<th>Account Balance</th>
+		<th>Code</th>
 		<th>Main GL Category</th>
-		<th>Description</th>
         <th>Status</th>
         <th>Options</th>
         
@@ -36,13 +37,14 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.CategoryName</td>
+                        <td>@item.AccountName</td>
+						<td>@item.AccountBalance</td>
+						<td>@item.AccountCode</td>
 						<td>@item.Categories</td>
-                        <td>@item.CategoryDescription</td>
                         <td>@item.Status</td>
                         <td>
-                            <a asp-controller="GLCategory" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-success">Edit</a>
-                           <a asp-controller="GLCategory" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
+                            <a asp-controller="GLAccount" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-success">Edit</a>
+                           <a asp-controller="GLAccount" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
                            
                         </td>
                     </tr>
@@ -53,6 +55,6 @@
 }
     else
     {
-        <p>No categories created yet</p>
+        <p>No items created yet</p>
     }
 

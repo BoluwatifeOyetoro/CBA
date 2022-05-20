@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CBA.Core.Enums
+@model CBA.Core.Models.GLAccount
+@{
+    ViewData["Title"] = "GLAccounts";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">GLAccount Details</h1>
+</div>
+
+<div class="">
+     <form method="post">
+        <div asp-validation-summary = "All" class = "text-danger"></div>
+
+
+          <div class="text-right">
+     <a asp-area="" asp-controller="GLAccount" asp-action="Index" class="btn btn-primary">Back</a>
+    </div>
+    <br />  
+
+   <div class="form-row">
+       <div class="form-group col-md-2">
+       <label asp-for = "Id" class="control-label">GLAccount Id</label>
+      <input asp-for = "Id" class="form-control" readonly />
+      </div>
+      <div class="form-group col-md-5">
+       <label asp-for = "AccountName" class="control-label">GLAccount Name</label>
+      <input asp-for = "AccountName" class="form-control" readonly />
+      <span asp-validation-for = "AccountName" class = "text-danger"></span>
+      </div>
+
+	 <div class="form-group col-md-5">
+       <label asp-for = "Status" class="control-label">Status</label>
+     <select asp-for = "Status" class = "form-control" asp-items="Html.GetEnumSelectList<Status>()" disabled>
+        <option value="@Status.Enabled"></option>
+      </select>
+      </div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-md-4">
+       <label asp-for = "AccountBalance" class="control-label">GLAccount Balance</label>
+      <input asp-for = "AccountBalance" class="form-control" readonly />
+      <span asp-validation-for = "AccountBalance" class = "text-danger"></span>
+      </div>
+	  <div class="form-group col-md-4">
+       <label asp-for = "AccountCode" class="control-label">GLAccount Code</label>
+      <input asp-for = "AccountCode" class="form-control" readonly />
+      <span asp-validation-for = "AccountCode" class = "text-danger"></span>
+      </div>
+	<div class="form-group col-md-4">
+        <label asp-for = "Categories" class="control-label">Categories</label>
+     <select asp-for = "Categories" class = "form-control" asp-items="Html.GetEnumSelectList<Categories>()" disabled>
+        <option value="@Model.Categories"></option>
+      </select>  
+      </div>
+	  </div>
+	</form>
+ </div>

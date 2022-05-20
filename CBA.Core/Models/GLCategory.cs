@@ -10,11 +10,11 @@ namespace CBA.Core.Models
 {
     public class GLCategory  
     {
-        public int GLCategoryId { get; set; }
-        public virtual string CategoryName { get; set; }
-        public virtual Categories Categories { get; set; }
+        public int Id { get; set; }
+        public  string CategoryName { get; set; }
+        public Categories Categories { get; set; }
         public long CategoryCode { get; set; }
-        public virtual Status? Status { get; set; }
-        public virtual string CategoryDescription { get; set; }
+        public Status? Status { get; set; }
+        public string CategoryDescription { get; set; }
     }
 }

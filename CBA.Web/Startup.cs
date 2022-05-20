@@ -49,7 +49,7 @@ namespace CBA.Web
             services.AddControllersWithViews();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
            // services.AddTransient<IGLAccountDAO, GLAccountDAO>();
-           // services.AddTransient<IGLCategoryDAO, GLCategoryDAO>();
+            //services.AddTransient<IGLCategoryDAO, GLCategoryDAO>();
             services.AddTransient<ICustomerAccountDAO, CustomerAccountDAO>();
             services.AddTransient<ICustomerDAO, CustomerDAO>();
             services.AddTransient<IMailService, MailService>();

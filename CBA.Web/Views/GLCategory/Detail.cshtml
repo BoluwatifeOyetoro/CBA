@@ -7,9 +7,8 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Edit GLCategory</h1>
+    <h1 class="display-4">GLCategory Details</h1>
 </div>
-
 
 <div class="">
      <form method="post">
@@ -18,34 +17,39 @@
 
           <div class="text-right">
      <a asp-area="" asp-controller="GLCategory" asp-action="Index" class="btn btn-primary">Back</a>
-     <button type="submit" class="btn btn-outline-primary">Update</button>
     </div>
     <br />  
 
-     <div class="form-row">
+   <div class="form-row">
        <div class="form-group col-md-2">
-       <label asp-for = "Id" class="control-label">Category Id</label>
+       <label asp-for = "Id" class="control-label">GLCategory Id</label>
       <input asp-for = "Id" class="form-control" readonly />
       </div>
       <div class="form-group col-md-5">
        <label asp-for = "CategoryName" class="control-label">Category Name</label>
-      <input asp-for = "CategoryName" class="form-control" />
+      <input asp-for = "CategoryName" class="form-control" readonly />
       <span asp-validation-for = "CategoryName" class = "text-danger"></span>
       </div>
-	<div class="form-group col-md-5">
-       <label asp-for = "Status" class="control-label">Status</label>
-      <select asp-for = "Status" class = "form-control" asp-items="Html.GetEnumSelectList<Status>()">
-        <option value="">Please select</option>
-      </select>
-      <span asp-validation-for = "Status" class = "text-danger"></span>
+
+	 <div class="form-group col-md-5">
+        <label asp-for = "Status" class="control-label">Status</label>
+     <select asp-for = "Status" class = "form-control" asp-items="Html.GetEnumSelectList<Status>()" disabled>
+        <option value="@Status.Enabled"></option>
+      </select>  
       </div>
 	</div>
 	<div class="form-row">
-      
-	<div class="form-group col-md-6">
+      <div class="form-group col-md-6">
        <label asp-for = "CategoryDescription" class="control-label">Category Description</label>
-      <input asp-for = "CategoryDescription" class="form-control" />
+      <input asp-for = "CategoryDescription" class="form-control" readonly />
       <span asp-validation-for = "CategoryDescription" class = "text-danger"></span>
+      </div>
+
+	 <div class="form-group col-md-6">
+        <label asp-for = "Categories" class="control-label">Categories</label>
+     <select asp-for = "Categories" class = "form-control" asp-items="Html.GetEnumSelectList<Categories>()" disabled>
+        <option value="@Model.Categories"></option>
+      </select>  
       </div>
 	</div>
     </form>

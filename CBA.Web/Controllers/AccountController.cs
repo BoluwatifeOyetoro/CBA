@@ -35,7 +35,7 @@ namespace CBA.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Register(Register model)
         {

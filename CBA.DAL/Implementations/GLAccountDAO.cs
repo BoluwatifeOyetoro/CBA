@@ -66,7 +66,7 @@
 //            long newGlCode = 10;
 //            Categories mainGl = glAccount.Categories;
 
-//            var categoryList = context.GLAccounts.ToList().OrderByDescending(c => c.GLAccountId);
+//            var categoryList = context.GLAccounts.ToList().OrderByDescending(c => c.Id);
 
 //            if (categoryList.Any())
 //            {
