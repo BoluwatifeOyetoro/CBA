@@ -8,6 +8,7 @@ namespace CBA.Core.Models
     {
         [Key]
         [Required]
+        
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Required]

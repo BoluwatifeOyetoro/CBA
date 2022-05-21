@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBA.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220518221400_ModifyIdentityUsersAndRoles")]
+    [Migration("20220520195926_ModifyIdentityUsersAndRoles")]
     partial class ModifyIdentityUsersAndRoles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,7 @@ namespace CBA.DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -52,6 +52,14 @@ namespace CBA.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "226e7fc6-6547-43b4-b0fd-89d1ec581c5f",
+                            ConcurrencyStamp = "05ed4e78-8758-4689-b4c6-57a85a22f4dd",
+                            State = 0
+                        });
                 });
 
             modelBuilder.Entity("CBA.Core.Models.ApplicationUser", b =>
@@ -109,7 +117,7 @@ namespace CBA.DAL.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -130,49 +138,6 @@ namespace CBA.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
-                {
-                    b.Property<int>("GLAccountID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GLAccountID"), 1L, 1);
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GLCategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GLAccountID");
-
-                    b.HasIndex("GLCategoryId");
-
-                    b.ToTable("GLAccounts");
-                });
-
-            modelBuilder.Entity("CBA.Core.Models.GLCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GLCategories");
                 });
 
             modelBuilder.Entity("CBA.Core.Models.Login", b =>
@@ -303,15 +268,6 @@ namespace CBA.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CBA.Core.Models.GLAccount", b =>
-                {
-                    b.HasOne("CBA.Core.Models.GLCategory", "GLCategory")
-                        .WithMany()
-                        .HasForeignKey("GLCategoryId");
-
-                    b.Navigation("GLCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

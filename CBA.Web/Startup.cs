@@ -2,6 +2,7 @@ using CBA.Core.Models;
 using CBA.DAL;
 using CBA.DAL.Context;
 using CBA.DAL.Implementations;
+//using CBA.DAL.Implementations;
 using CBA.DAL.Interfaces;
 using CBA.Services.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -33,7 +34,7 @@ namespace CBA.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<AppDbContext>(
+            services.AddDbContext<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 //services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -48,10 +49,10 @@ namespace CBA.Web
             services.AddMvc();
             services.AddControllersWithViews();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-           // services.AddTransient<IGLAccountDAO, GLAccountDAO>();
-            //services.AddTransient<IGLCategoryDAO, GLCategoryDAO>();
-            services.AddTransient<ICustomerAccountDAO, CustomerAccountDAO>();
-            services.AddTransient<ICustomerDAO, CustomerDAO>();
+            services.AddScoped<IGLAccountDAO, GLAccountDAO>();
+            services.AddScoped<IGLCategoryDAO, GLCategoryDAO>();
+            services.AddScoped<ICustomerAccountDAO, CustomerAccountDAO>();
+            services.AddScoped<ICustomerDAO, CustomerDAO>();
             services.AddTransient<IMailService, MailService>();
             services.AddTransient<AppUserSeedData>();
         }

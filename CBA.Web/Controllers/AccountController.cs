@@ -155,7 +155,6 @@ namespace CBA.Web.Controllers
         //  }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(Login model, string returnUrl)
         {
             if (ModelState.IsValid)

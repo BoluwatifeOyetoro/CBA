@@ -11,6 +11,10 @@ namespace CBA.DAL.Context
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,string>
     {
+        //public AppDbContext()
+        //{
+
+        //}
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
 
@@ -18,14 +22,23 @@ namespace CBA.DAL.Context
 
         public DbSet<Login> Login { get; set; }
         public DbSet<GLCategory> GLCategories { get; set; }
-
         public DbSet<GLAccount> GLAccounts { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerAccount> CustomerAccounts { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole
+                {
+                   // Name = "Super Admin",
+                    Status = Core.Enums.Status.Enabled,
+                }
+
+                );
+
         }
 
 

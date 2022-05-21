@@ -10,6 +10,7 @@ namespace CBA.Core.Models
 {
     public class GLAccount
     {
+        [Key]
         public int Id { get; set; }
         [Display(Name = "Account Name")]
         public string AccountName { get; set; }
@@ -25,6 +26,7 @@ namespace CBA.Core.Models
 
         public Status? Status { get; set; }
 
-        public GLCategory GlCategory { get; set; }
+        //public GLCategory GlCategory { get; set; }
+        public int GLCategoryID { get; set; }
     }
 }

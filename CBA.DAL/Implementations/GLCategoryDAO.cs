@@ -15,12 +15,11 @@ namespace CBA.DAL.Implementations
         private readonly AppDbContext context;
         private readonly GLCategory glCategory;
         private readonly GLCategory glCategoryChanges;
-
-        public GLCategoryDAO(GLCategory glCategory, AppDbContext context, GLCategory glCategoryChanges)
+        public GLCategoryDAO(GLCategory glCategory, AppDbContext context)
         {
             this.context = context;
             this.glCategory = glCategory;
-            this.glCategoryChanges = glCategoryChanges;
+            this.glCategory = glCategoryChanges;
         }
 
         public GLCategory Delete(long id)
@@ -58,7 +57,7 @@ namespace CBA.DAL.Implementations
             return glCategory;
         }
 
-        public GLCategory UpdateGLCategory(GLCategory userChanges)
+        public GLCategory UpdateGLCategory(GLCategory glCategoryChanges)
         {
             var gLCategory = context.GLCategories.Attach(glCategoryChanges);
             gLCategory.State = Microsoft.EntityFrameworkCore.EntityState.Modified;

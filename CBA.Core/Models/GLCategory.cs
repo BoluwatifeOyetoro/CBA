@@ -2,6 +2,7 @@
 using CBA.Core.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace CBA.Core.Models
 {
     public class GLCategory  
     {
+        [Key]
         public int Id { get; set; }
         public  string CategoryName { get; set; }
         public Categories Categories { get; set; }

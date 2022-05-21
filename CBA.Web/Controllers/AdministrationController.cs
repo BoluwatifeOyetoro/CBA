@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CBA.Web.Controllers
 {
-    //[Authorize (Roles = "Admin")]
+    [Authorize (Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<ApplicationRole> roleManager;
@@ -163,7 +163,7 @@ namespace CBA.Web.Controllers
             {
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
-                    model.Users.Add(user.UserName);
+                    model.Users.Add(user.Email);
                 }
             }
             return View(model);
