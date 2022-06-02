@@ -3,48 +3,48 @@
 @model CBA.Core.Models.CustomerAccount
 
 @{
-    ViewData["Title"] = "Customer Accounts";
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<div class="text-center">
-    <h1 class="display-4">Edit Customer Accounts</h1>
-</div>
+<h2>Edit</h2>
 
 
-<div class="">
-     <form method="post">
-        <div asp-validation-summary = "All" class = "text-danger"></div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>CustomerAccount</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BranchID, "BranchID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("BranchID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BranchID, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
 
-          <div class="text-right">
-     <a asp-area="" asp-controller="CustomerAccount" asp-action="Index" class="btn btn-primary">Back</a>
-     <button type="submit" class="btn btn-outline-primary">Update</button>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
     </div>
-    <br />  
+}
 
-     <div class="form-row">
-       <div class="form-group col-md-2">
-       <label asp-for = "Id" class="control-label">Account Number</label>
-      <input asp-for = "Id" class="form-control" readonly />
-      </div>
-      <div class="form-group col-md-5">
-       <label asp-for = "Customer" class="control-label">Customer</label>
-      <input asp-for = "Customer" class="form-control" />
-      <span asp-validation-for = "Customer" class = "text-danger"></span>
-      </div>
-
-	 <div class="form-group col-md-5">
-       <label asp-for = "Status" class="control-label">Status</label>
-      <select asp-for = "Status" class = "form-control" asp-items="Html.GetEnumSelectList<Status>()">
-        <option value="">Please select</option>
-      </select>
-      <span asp-validation-for = "Status" class = "text-danger"></span>
-      </div>
-	</div>
-	
-	
-
-
-    </form>
- </div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

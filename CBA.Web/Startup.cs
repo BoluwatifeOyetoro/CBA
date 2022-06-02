@@ -2,7 +2,6 @@ using CBA.Core.Models;
 using CBA.DAL;
 using CBA.DAL.Context;
 using CBA.DAL.Implementations;
-//using CBA.DAL.Implementations;
 using CBA.DAL.Interfaces;
 using CBA.Services.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -49,16 +48,20 @@ namespace CBA.Web
             services.AddMvc();
             services.AddControllersWithViews();
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddScoped<IGLAccountDAO, GLAccountDAO>();
-            services.AddScoped<IGLCategoryDAO, GLCategoryDAO>();
-            services.AddScoped<ICustomerAccountDAO, CustomerAccountDAO>();
-            services.AddScoped<ICustomerDAO, CustomerDAO>();
+            services.AddTransient<IGLAccountDAO, GLAccountDAO>();
+            services.AddTransient<IGLCategoryDAO, GLCategoryDAO>();
+            services.AddTransient<ICustomerDAO, CustomerDAO>();
+            services.AddTransient<ICustomerAccountDAO, CustomerAccountDAO>();
+            services.AddTransient<IAccountTypeManagementDAO, AccountTypeManagementDAO>();
+            services.AddTransient<ITellerDAO, TellerDAO>();
+            services.AddTransient<IBalanceSheetDAO, BalanceSheetDAO>();
             services.AddTransient<IMailService, MailService>();
-            services.AddTransient<AppUserSeedData>();
+
+            //services.AddTransient<AppUserSeedData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, AppUserSeedData seeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             if (env.IsDevelopment())
             {

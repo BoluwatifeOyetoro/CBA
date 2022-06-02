@@ -29,13 +29,14 @@ namespace CBA.Web.Controllers
             this.mailService = mailService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Register(Register model)
         {
@@ -43,6 +44,7 @@ namespace CBA.Web.Controllers
             {
                 var user = new ApplicationUser
                 {
+                    UserName = model.Email,
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -72,7 +74,7 @@ namespace CBA.Web.Controllers
                     //      "email, by clicking on the confirmation link we have emailed you";
                     //return View("Error");
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    await mailService.SendEmailAsync(mail);
+                   // await mailService.SendEmailAsync(mail);
                     return RedirectToAction("listusers", "administration");
                 }
 

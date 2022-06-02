@@ -1,105 +1,161 @@
-﻿using CBA.Core.Models;
-using CBA.DAL.Context;
+﻿using Microsoft.AspNetCore.Mvc;
 using CBA.DAL.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CBA.DAL;
+using CBA.Core.Models;
+using CBA.Services.Settings;
+using CBA.DAL.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CBA.Web.Controllers
 {
     public class GLCategoryController : Controller
     {
-        private readonly IGLCategoryDAO _glCategory;
+        private readonly AppDbContext context;
+        private readonly IMailService service;
+        private readonly IGLAccountDAO accountDAO;
 
-        public GLCategoryController(IGLCategoryDAO glCategory)
+        public GLCategoryController(AppDbContext context, IMailService _service, IGLAccountDAO _accountDAO)
         {
-            _glCategory = glCategory;
+            this.context = context;
+            service = _service;
+            accountDAO = _accountDAO;
         }
 
-
-        public IActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var gLCategories = _glCategory.GetAllGLCategories();
-            return View(gLCategories);
+            return View(await context.GLCategories.ToListAsync());
         }
 
-        [HttpGet]
-        public IActionResult Create()
+        // GET: GlCategories/Details/5
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("ErrorView", "Error");
+            }
+            GLCategory glCategory = await context.GLCategories.FindAsync(id);
+            if (glCategory == null)
+            {
+                return RedirectToAction("ErrorView", "Error");
+            }
+            return View(glCategory);
+        }
+
+        // GET: GlCategories/Create
+        public ActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
-        public IActionResult Create(GLCategory model)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(GLCategory glCategory)
         {
+
             if (ModelState.IsValid)
             {
-                GLCategory newGLCategory = new()
+                if (!service.IsUniqueGLAcategory(glCategory.CategoryName))
                 {
-                    Id = model.Id,
-                    CategoryName = model.CategoryName,
-                    Status = model.Status,
-                    CategoryDescription = model.CategoryDescription,
-                    Categories = model.Categories,
-                    //CategoryCode = _operations.CreateGlCategoryCode(gLCategory),
-                    //GLCategoryAccount = model.GLCategoryAccount,
-                };
-                _glCategory.Save(newGLCategory);
-                //return RedirectToAction("index", new { id = newUser.Id });
-                return RedirectToAction("index", "GLCategory", new { area = "" });
+                    AddError("The GL Category Name already exists");
+                    return View(glCategory);
+                }
+
+                glCategory.CategoryCode = service.CreateGlCategoryCode(glCategory);
+                context.GLCategories.Add(glCategory);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
 
-            return View(model);
+            return View(glCategory);
         }
 
-        [HttpGet]
-        public IActionResult Detail(int id)
+        // GET: GlCategories/Edit/5
+        public async Task<ActionResult> Edit(int? id)
         {
-            var gLCategory = _glCategory.RetrieveById(id);
-            GLCategory editUserViewModel = new GLCategory()
+            if (id == null)
             {
-                //GLCategoryId = gLCategory.GLCategoryId,
-                CategoryName = gLCategory.CategoryName,
-                Status = gLCategory.Status,
-                CategoryCode = gLCategory.CategoryCode,
-                CategoryDescription = gLCategory.CategoryDescription,
-                Categories = gLCategory.Categories,
-            };
-            return View(editUserViewModel);
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var gLCategory = _glCategory.RetrieveById(id);
-            GLCategory editUserViewModel = new GLCategory()
+                return RedirectToAction("ErrorView", "Error");
+            }
+            GLCategory glCategory = await context.GLCategories.FindAsync(id);
+            if (glCategory == null)
             {
-                //GLCategoryId = gLCategory.GLCategoryId,
-                CategoryName = gLCategory.CategoryName,
-                Status = gLCategory.Status,
-                CategoryDescription = gLCategory.CategoryDescription,
-            };
-            return View(editUserViewModel);
+                return RedirectToAction("ErrorView", "Error");
+            }
+            return View(glCategory);
         }
 
         [HttpPost]
-        public IActionResult Edit(GLCategory model)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(GLCategory glCategory)
         {
             if (ModelState.IsValid)
             {
-                GLCategory gLCategory = _glCategory.RetrieveById(model.Id);
-                //Console.WriteLine(model.Id);
-                //gLCategory.GLCategoryId = model.GLCategoryId;
-                gLCategory.CategoryName = model.CategoryName;
-                gLCategory.Status = model.Status;
-                gLCategory.CategoryDescription = model.CategoryDescription;
+                if (!service.IsUniqueGLAcategory(glCategory.CategoryName))
+                    context.Entry(glCategory).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(glCategory);
+        }
 
-                GLCategory updatedGLCategory = _glCategory.UpdateGLCategory(gLCategory);
+        // GET: GlCategories/Delete/5
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("ErrorView", "Error");
 
-                return RedirectToAction("index", "GLCategory", new { area = "" });
+            }
+            GLCategory glCategory = await context.GLCategories.FindAsync(id);
+            if (glCategory == null)
+            {
+                return RedirectToAction("ErrorView", "Error");
+            }
+            return View(glCategory);
+        }
+
+        // POST: GlCategories/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            GLCategory glCategory = await context.GLCategories.FindAsync(id);
+
+
+            var allGlAccount = context.GLAccounts.ToList();
+
+            foreach (var acct in allGlAccount)
+            {
+                if (acct.GLCategoryID == id)
+                {
+                    AddError("GL Categories Cannot be deleted because it is linked to a GL Account");
+                    return View("CategoryDeleteError");
+                }
+
             }
 
-            return View(model);
+            var tellers = await service.GetAllTellers();
+            var gglAccountTill = context.GLAccounts.Where(c => c.AccountName.ToLower().Contains("till")).ToList();
+
+            context.GLCategories.Remove(glCategory);
+            await context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                context.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+        private void AddError(string error)
+        {
+            ModelState.AddModelError("", error);
         }
     }
-
 }

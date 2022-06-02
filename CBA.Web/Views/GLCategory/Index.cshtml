@@ -1,58 +1,60 @@
 ﻿@using CBA.Core.Models
 @model IEnumerable<GLCategory>
 
-@{
-    ViewData["Title"] = "GLCategories";
+
+    @{
+    ViewBag.Title = "Gl Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<div class="text-center">
-    <h1 class="display-4">List of GLCategories</h1>
+<div style="display: flex; align-items: center; margin-bottom: 2rem">
+    <a class="btn btn-info" asp-controller="glaccount" asp-action="index">View GLAccount's</a>
 </div>
-<div class="text-right">
-    
-     <a asp-area="" asp-controller="GLCategory" asp-action="Create" class="btn btn-primary">Add new GLCategory</a>
-</div>
-<br />
 
 
-@if(Model.Count() > 0)
-    {
-<table class="table table-bordered table-striped" style='width:100%'>
+<h2>Gl Categories</h2>
 
-<thead class="thead-light">
+<p>
+    @Html.ActionLink("Create New", "Create", new { @class = "btn btn-primary" })
+</p>
+<table class="table table-bordered table-striped">
     <tr>
-        <th>S/n</th>
-        <th>Category Name</th>
-		<th>Main GL Category</th>
-		<th>Description</th>
-        <th>Status</th>
-        <th>Options</th>
-        
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MainGLCategory)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryCode)
+        </th>
+        <th></th>
     </tr>
-</thead>
-<tbody>
-    @foreach(var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.CategoryName</td>
-						<td>@item.Categories</td>
-                        <td>@item.CategoryDescription</td>
-                        <td>@item.Status</td>
-                        <td>
-                            <a asp-controller="GLCategory" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-success">Edit</a>
-                           <a asp-controller="GLCategory" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-                           
-                        </td>
-                    </tr>
-                }
-   
-</tbody>
-</table>
-}
-    else
+
+    @foreach (var item in Model)
     {
-        <p>No categories created yet</p>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MainGLCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryCode)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new {@class = "btn btn-primary" }) 
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary" }) 
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
     }
 
+</table>

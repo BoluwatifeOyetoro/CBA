@@ -24,9 +24,16 @@ namespace CBA.Core.Models
         public double AccountBalance { get; set; }
 
 
-        public Status? Status { get; set; }
+        public Status? State { get; set; }
+
+
+        [Required(ErrorMessage = "Select a Branch")]
+        public int BranchID { get; set; }
+        public Branch Branch { get; set; }
 
         //public GLCategory GlCategory { get; set; }
         public int GLCategoryID { get; set; }
+        public virtual GLCategory GLCategory { get; set; }
+
     }
 }

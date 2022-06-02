@@ -43,7 +43,7 @@ namespace CBA.DAL
 
                 if (context.Roles.Any(r => r.Name == role))
                 {
-                    await roleManager.CreateAsync(new ApplicationRole { Name = role, Status = Status.Enabled, NormalizedName = role.ToUpper() });
+                    await roleManager.CreateAsync(new ApplicationRole { Name = role, State = Status.Enabled, NormalizedName = role.ToUpper() });
                 }
             }
             var user = new ApplicationUser
@@ -53,19 +53,14 @@ namespace CBA.DAL
                 LastName = "Oyetoro",
                 Email = "bolexcoded43@gmail.com",
                 Gender = Core.Enums.Gender.Any,
-                NormalizedEmail = "DREECAST07@GMAIL.COM",
-                NormalizedUserName = "SUPERADMIN",
                 Status = Status.Enabled,
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
             };
 
             if (!context.Users.Any(u => u.Email == user.Email))
             {
-                var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user, "password");
-                user.PasswordHash = hashed;
+                //var password = new PasswordHasher<ApplicationUser>();
+                //var hashed = password.HashPassword(user, "password");
+                //user.PasswordHash = hashed;
                 var userStore = new UserStore<ApplicationUser>(context);
                 await userStore.CreateAsync(user);
                 await userManager.AddToRoleAsync(user, "SUPER ADMIN");

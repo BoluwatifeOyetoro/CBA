@@ -1,63 +1,68 @@
 ﻿@using CBA.Core.Enums
+@using static CBA.Core.Enums.Enums
 @model CBA.Core.Models.GLCategory
 
 @{
-    ViewData["Title"] = "Create GLCategory";
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Create GLCategory</h1>
-</div>
+<h2>Create New GL Category</h2>
 
 
-<div class="">
-     <form method="post">
-        <div asp-validation-summary = "All" class = "text-danger"></div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
+    <div class="form-horizontal">
+        <h4>GlCategory</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-          <div class="text-right">
-     <a asp-area="" asp-controller="GLCategory" asp-action="Index" class="btn btn-primary">Back</a>
-     <button type="submit" class="btn btn-outline-primary">Create</button>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.MainGLCategory, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.GetEnumSelectList(model => model.MainGLCategory, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MainGLCategory, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <label asp-for="MainGLCategory" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <select asp-for="MainGLCategory" class="custom-select mr-sm-2"
+                        asp-items="Html.GetEnumSelectList<MainGLCategory>()">
+                    <option value="">Please Select</option>
+                </select>
+                <span asp-validation-for="MainGLCategory" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CategoryDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CategoryDescription, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
     </div>
-    <br />  
+}
 
-
-    <div class="form-row">
-      <div class="form-group col-md-3">
-       <label asp-for = "CategoryName" class="control-label">Category Name</label>
-      <input asp-for = "CategoryName" class="form-control" />
-      <span asp-validation-for = "CategoryName" class = "text-danger"></span>
-      </div>
-	  
-	  <div class="form-group col-md-3">
-       <label asp-for = "CategoryDescription" class="control-label">Category Description</label>
-      <input asp-for = "CategoryDescription" class="form-control" />
-      <span asp-validation-for = "CategoryDescription" class = "text-danger"></span>
-      </div>
-
-	 <div class="form-group col-md-3">
-      <label asp-for = "Categories" class="control-label">Main GL Category</label>
-      <select asp-for = "Categories" class = "form-control" asp-items="Html.GetEnumSelectList<Categories>()">
-        <option value="">Please select</option>
-      </select>
-      <span asp-validation-for = "Categories" class = "text-danger"></span>
-      </div>
-      <div class="form-group col-md-3">
-       <label asp-for = "Status" class="control-label">Status</label>
-      <select asp-for = "Status" class = "form-control" asp-items="Html.GetEnumSelectList<Status>()">
-        <option value="">Please select</option>
-      </select>
-      <span asp-validation-for = "Status" class = "text-danger"></span>
-      </div>
-	</div>
-	
-
-    </form>
-    
-  
-
+<div>
+    @Html.ActionLink("Back to List", "Index")
 </div>
-
-
 
 

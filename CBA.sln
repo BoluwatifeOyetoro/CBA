@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CBA.Core", "CBA.Core\CBA.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CBA.DAL", "CBA.DAL\CBA.DAL.csproj", "{69415894-E225-4E97-B759-E27EEFFB7516}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CBA.Services", "CBA.Services\CBA.Services.csproj", "{1867BA37-6304-454A-87D7-EE3937F39DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CBA.Services", "CBA.Services\CBA.Services.csproj", "{1867BA37-6304-454A-87D7-EE3937F39DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

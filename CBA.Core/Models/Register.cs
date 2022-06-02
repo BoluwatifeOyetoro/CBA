@@ -1,4 +1,5 @@
 ﻿using CBA.Core.Enums;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,7 @@ namespace CBA.Core.Models
     {
         [Required]
         [EmailAddress]
-        //[Remote(action: "IsEmailInUse", controller:"Account")]
+        [Remote(action: "IsEmailInUse", controller:"Account")]
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]

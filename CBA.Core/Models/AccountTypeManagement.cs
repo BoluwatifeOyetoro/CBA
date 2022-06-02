@@ -19,17 +19,17 @@ namespace CBA.Core.Models
         [RegularExpression(@"^[.0-9]+$", ErrorMessage = "Invalid format")]
         public double CurrentCreditInterestRate { get; set; }
 
-        [Display(Name = "Minimum Balance for Current")]
-        [Range(0, (double)decimal.MaxValue)]
-        [DataType(DataType.Currency)]
-        [RegularExpression(@"^[.0-9]+$", ErrorMessage = "Invalid format")]
-        public decimal CurrentMinimumBalance { get; set; }
+        //[Display(Name = "Minimum Balance for Current")]
+        //[Range(0, (double)decimal.MaxValue)]
+        //[DataType(DataType.Currency)]
+        //[RegularExpression(@"^[.0-9]+$", ErrorMessage = "Invalid format")]
+        public double CurrentMinimumBalance { get; set; }
 
         [DataType(DataType.Currency)]
         [Display(Name = "COT")]
         [Range(0.00, 1000.00)]
         [RegularExpression(@"^[.0-9]+$", ErrorMessage = "Invalid format")]
-        public decimal COT { get; set; }
+        public double COT { get; set; }
 
         [Display(Name = "Select Interest Expense GL")]
         public int? CurrentInterestExpenseGlID { get; set; }
@@ -56,7 +56,7 @@ namespace CBA.Core.Models
         [Range(0, (double)decimal.MaxValue)]
         [DataType(DataType.Currency)]
         [RegularExpression(@"^[.0-9]+$", ErrorMessage = "Invalid format for minimum balance")]
-        public decimal SavingsMinimumBalance { get; set; }
+        public double SavingsMinimumBalance { get; set; }
 
 
 

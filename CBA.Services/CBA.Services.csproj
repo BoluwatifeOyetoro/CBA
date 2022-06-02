@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CBA.Core\CBA.Core.csproj" />
+    <ProjectReference Include="..\CBA.DAL\CBA.DAL.csproj" />
   </ItemGroup>
 
 </Project>

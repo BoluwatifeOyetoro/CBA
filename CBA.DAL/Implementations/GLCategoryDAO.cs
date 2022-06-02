@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CBA.DAL.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using CBA.DAL.Interfaces;
 using System.Text;
 using System.Threading.Tasks;
 using CBA.Core.Models;
-using CBA.Core.Enums;
 using CBA.DAL.Context;
 
 namespace CBA.DAL.Implementations
@@ -13,13 +12,11 @@ namespace CBA.DAL.Implementations
     public class GLCategoryDAO : IGLCategoryDAO
     {
         private readonly AppDbContext context;
-        private readonly GLCategory glCategory;
-        private readonly GLCategory glCategoryChanges;
-        public GLCategoryDAO(GLCategory glCategory, AppDbContext context)
+       
+
+        public GLCategoryDAO(AppDbContext context)
         {
             this.context = context;
-            this.glCategory = glCategory;
-            this.glCategory = glCategoryChanges;
         }
 
         public GLCategory Delete(long id)
@@ -52,17 +49,20 @@ namespace CBA.DAL.Implementations
 
         public GLCategory Save(GLCategory item)
         {
-            context.GLCategories.Add(glCategory);
+            context.GLCategories.Add(item);
             context.SaveChanges();
-            return glCategory;
+            return item;
         }
 
-        public GLCategory UpdateGLCategory(GLCategory glCategoryChanges)
+        public GLCategory UpdateGLCategory(GLCategory userChanges)
         {
-            var gLCategory = context.GLCategories.Attach(glCategoryChanges);
+            var gLCategory = context.GLCategories.Attach(userChanges);
             gLCategory.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            return glCategoryChanges;
+            return userChanges;
         }
+
+
+
     }
 }

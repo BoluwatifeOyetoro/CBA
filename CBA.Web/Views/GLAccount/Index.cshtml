@@ -2,59 +2,60 @@
 @model IEnumerable<GLAccount>
 
 @{
-    ViewData["Title"] = "GLAccounts";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>Gl Accounts</h2>
 
-<div class="text-center">
-    <h1 class="display-4">List of GLAccounts</h1>
-</div>
-<div class="text-right">
-    
-     <a asp-area="" asp-controller="GLAccount" asp-action="Create" class="btn btn-primary">Add new GLAccount</a>
-</div>
-<br />
-
-
-@if(Model.Count() > 0)
-    {
-<table class="table table-bordered table-striped" style='width:100%'>
-
-<thead class="thead-light">
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-bordered table-striped">
     <tr>
-        <th>S/n</th>
-        <th>GL Account Name</th>
-		<th>Account Balance</th>
-		<th>Code</th>
-		<th>Main GL Category</th>
-        <th>Status</th>
-        <th>Options</th>
-        
+        <th>
+            @Html.DisplayNameFor(model => model.Branch.Name)
+        </th>
+        <th>
+            GL Category Name
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountBalance)
+        </th>
+        <th></th>
     </tr>
-</thead>
-<tbody>
-    @foreach(var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.AccountName</td>
-						<td>@item.AccountBalance</td>
-						<td>@item.AccountCode</td>
-						<td>@item.Categories</td>
-                        <td>@item.Status</td>
-                        <td>
-                            <a asp-controller="GLAccount" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-success">Edit</a>
-                           <a asp-controller="GLAccount" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-                           
-                        </td>
-                    </tr>
-                }
-   
-</tbody>
-</table>
-}
-    else
+
+    @foreach (var item in Model)
     {
-        <p>No items created yet</p>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Branch.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GLCategory.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountBalance)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" }) 
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-primary" }) 
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-primary" })
+
+            </td>
+        </tr>
     }
 
+</table>

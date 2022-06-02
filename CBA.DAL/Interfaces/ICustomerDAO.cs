@@ -9,12 +9,17 @@ namespace CBA.DAL.Interfaces
 {
     public interface ICustomerDAO
     {
-        Customer Save(Customer item);
-        Customer RetrieveById(int id);
-        Customer Delete(long id);
-        Customer UpdateCustomer(Customer userChanges);
-        IEnumerable<Customer> GetAllCustomers();
-        Customer GetRoles(Customer user);
-        int GenerateCustomerId(int id);
+
+        Customer GetById(int id);
+        IEnumerable<Customer> GetAll();
+
+
+        //Customer Save(Customer item);
+        //Customer RetrieveById(int id);
+        //Customer Delete(long id);
+        //Customer UpdateCustomer(Customer userChanges);
+        //IEnumerable<Customer> GetAllCustomers();
+        //Customer GetRoles(Customer user);
+        //int GenerateCustomerId(int id);
     }
 }

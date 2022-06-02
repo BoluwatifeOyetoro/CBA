@@ -9,7 +9,7 @@ namespace CBA.Core.Models
 {
     public class Branch
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(255)]
